@@ -33,7 +33,7 @@ class SeparatedFlex extends StatelessWidget {
   final Widget Function()? separatorBuilder;
   
   /// Return a widget, to be used in between each child widget.
-  /// i is index of the widget immediently before this separator.
+  /// i is index of the widget immediately before this separator.
   final Widget Function(int i)? separatorIndexedBuilder;
 
   @override
@@ -95,7 +95,7 @@ class SeparatedRow extends StatelessWidget {
   final Widget Function()? separatorBuilder;
   
   /// Return a widget, to be used in between each child widget.
-  /// i is index of the widget immediently before this separator.
+  /// i is index of the widget immediately before this separator.
   final Widget Function(int i)? separatorIndexedBuilder;
 
   @override
@@ -122,7 +122,7 @@ class SeparatedColumn extends StatelessWidget {
   final Widget Function()? separatorBuilder;
   
   /// Return a widget, to be used in between each child widget.
-  /// i is index of the widget immediently before this separator.
+  /// i is index of the widget immediately before this separator.
   final Widget Function(int i)? separatorIndexedBuilder;
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;

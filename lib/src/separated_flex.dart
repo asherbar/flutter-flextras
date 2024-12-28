@@ -5,7 +5,8 @@ class SeparatedFlex extends StatelessWidget {
     Key? key,
     required this.children,
     required this.direction,
-    required this.separatorBuilder,
+    this.separatorIndexedBuilder,
+    this.separatorBuilder,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.mainAxisSize = MainAxisSize.max,
@@ -13,7 +14,9 @@ class SeparatedFlex extends StatelessWidget {
     this.textBaseline = TextBaseline.alphabetic,
     this.textDirection = TextDirection.ltr,
     this.padding = EdgeInsets.zero,
-  }) : super(key: key);
+  }) : super(key: key) {
+   assert(this.separatorIndexedBuilder != null || this.separatorBuilder != null, 'At least one of separatorIndexedBuilder or separatorBuilder must be set');
+  }
 
   final Axis direction;
   final List<Widget> children;
@@ -26,13 +29,25 @@ class SeparatedFlex extends StatelessWidget {
   final EdgeInsets padding;
 
   /// Return a widget, to be used in between each child widget
-  final Widget Function() separatorBuilder;
+  @Deprecated('use [separatorIndexedBuilder] instead')
+  final Widget Function()? separatorBuilder;
+  
+  /// Return a widget, to be used in between each child widget.
+  /// i is index of the widget immediently before this separator.
+  final Widget Function(int i)? separatorIndexedBuilder;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> c = List.of(children);
     for (var i = c.length; i-- > 0;) {
-      if (i > 0) c.insert(i, separatorBuilder());
+      if (i > 0) {
+        if (separatorBuilder != null) {
+          c.insert(i, separatorBuilder());
+        }
+        else if (separatorIndexedBuilder != null) {
+          c.insert(i, separatorIndexedBuilder(i));
+        }
+      }
     }
     Widget row = Flex(
       children: c,
@@ -53,7 +68,8 @@ class SeparatedRow extends StatelessWidget {
   const SeparatedRow({
     Key? key,
     required this.children,
-    required this.separatorBuilder,
+    this.separatorIndexedBuilder,
+    this.separatorBuilder,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.mainAxisSize = MainAxisSize.max,
@@ -61,7 +77,9 @@ class SeparatedRow extends StatelessWidget {
     this.textBaseline = TextBaseline.alphabetic,
     this.textDirection = TextDirection.ltr,
     this.padding = EdgeInsets.zero,
-  }) : super(key: key);
+  }) : super(key: key) {
+   assert(this.separatorIndexedBuilder != null || this.separatorBuilder != null, 'At least one of separatorIndexedBuilder or separatorBuilder must be set');
+  }
 
   final List<Widget> children;
   final MainAxisAlignment mainAxisAlignment;
@@ -73,10 +91,16 @@ class SeparatedRow extends StatelessWidget {
   final EdgeInsets padding;
 
   /// Return a widget, to be used in between each child widget
-  final Widget Function() separatorBuilder;
+  @Deprecated('use [separatorIndexedBuilder] instead')
+  final Widget Function()? separatorBuilder;
+  
+  /// Return a widget, to be used in between each child widget.
+  /// i is index of the widget immediently before this separator.
+  final Widget Function(int i)? separatorIndexedBuilder;
 
   @override
   Widget build(BuildContext context) => SeparatedFlex(
+        separatorIndexedBuilder: separatorIndexedBuilder,
         separatorBuilder: separatorBuilder,
         children: children,
         direction: Axis.horizontal,
@@ -93,7 +117,13 @@ class SeparatedRow extends StatelessWidget {
 /// Allows you to inject a widget between each item in the column
 class SeparatedColumn extends StatelessWidget {
   final List<Widget> children;
-  final Widget Function() separatorBuilder;
+  /// Return a widget, to be used in between each child widget
+  @Deprecated('use [separatorIndexedBuilder] instead')
+  final Widget Function()? separatorBuilder;
+  
+  /// Return a widget, to be used in between each child widget.
+  /// i is index of the widget immediently before this separator.
+  final Widget Function(int i)? separatorIndexedBuilder;
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
   final MainAxisSize mainAxisSize;
@@ -105,7 +135,8 @@ class SeparatedColumn extends StatelessWidget {
   const SeparatedColumn({
     Key? key,
     required this.children,
-    required this.separatorBuilder,
+    this.separatorIndexedBuilder,
+    this.separatorBuilder,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.mainAxisSize = MainAxisSize.max,
@@ -113,10 +144,13 @@ class SeparatedColumn extends StatelessWidget {
     this.textBaseline = TextBaseline.alphabetic,
     this.textDirection = TextDirection.ltr,
     this.padding = EdgeInsets.zero,
-  }) : super(key: key);
+  }) : super(key: key) {
+   assert(this.separatorIndexedBuilder != null || this.separatorBuilder != null, 'At least one of separatorIndexedBuilder or separatorBuilder must be set');
+  }
 
   @override
   Widget build(BuildContext context) => SeparatedFlex(
+        separatorIndexedBuilder: separatorIndexedBuilder,
         separatorBuilder: separatorBuilder,
         children: children,
         direction: Axis.vertical,
